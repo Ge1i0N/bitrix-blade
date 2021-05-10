@@ -13,10 +13,10 @@
   ],
   "homepage": "https://github.com/ge1i0n/bitrix-blade",
   "require": {
-    "php": ">=5.4.0",
-    "illuminate/container": "5.*",
-    "illuminate/view": "5.*",
-    "illuminate/events": "5.*",
+    "php": ">=7.3.0",
+    "illuminate/container": "8.*",
+    "illuminate/view": "8.*",
+    "illuminate/events": "8.*",
     "arrilot/bitrix-hermitage": "^1"
   },
   "autoload": {
