@@ -1,5 +1,5 @@
 {
-  "name": "arrilot/bitrix-blade",
+  "name": "ge1i0n/bitrix-blade",
   "license": "MIT",
   "keywords": [
     "bitrix",
@@ -11,7 +11,7 @@
       "email": "nekrasov.ilya90@gmail.com"
     }
   ],
-  "homepage": "https://github.com/Arrilot/bitrix-blade",
+  "homepage": "https://github.com/ge1i0n/bitrix-blade",
   "require": {
     "php": ">=5.4.0",
     "illuminate/container": "5.*",
