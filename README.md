@@ -1,17 +1,11 @@
-[![Latest Stable Version](https://poser.pugx.org/arrilot/bitrix-blade/v/stable.svg)](https://packagist.org/packages/arrilot/bitrix-blade/)
-[![Total Downloads](https://img.shields.io/packagist/dt/arrilot/bitrix-blade.svg?style=flat)](https://packagist.org/packages/Arrilot/bitrix-blade)
-[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/arrilot/bitrix-blade/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/arrilot/bitrix-blade/)
-
-# Данный пакет больше активно не поддерживается
-
-Причина - мы больше не используем Битрикс в своих проектах.
-Если вам интересен этот проект и вы хотите заняться его поддержкой - форкните его и создайте Issue в данном репозитории чтобы мы поместили здесь ссылку на форк.
+[![Latest Stable Version](https://poser.pugx.org/ge1i0n/bitrix-blade/v/stable.svg)](https://packagist.org/packages/ge1i0n/bitrix-blade/)
+[![Total Downloads](https://img.shields.io/packagist/dt/ge1i0n/bitrix-blade.svg?style=flat)](https://packagist.org/packages/ge1i0n/bitrix-blade)
 
 # Bitrix Blade - интеграция шаблонизатора Blade в Битрикс
 
 ## Установка
 
-1)```composer require arrilot/bitrix-blade```
+1)```composer require ge1i0n/bitrix-blade```
 
 2) добавляем в init.php
 
@@ -32,6 +26,16 @@ BladeProvider::register();
 
 1. Сначала view ищется относительно директории текущего шаблона компонента (там где лежит template.blade)
 2. Если не view там не нашёлся, то он ищется относительно базовой директории (по умолчанию `local/views`, но может быть указана другая при вызове `BladeProvider::register()`)
+
+## X-Компоненты
+
+Вы можете использовать x-компоненты в своём шаблоне.
+Для привязки своих классов используйте следующий способ регистрации в компиляторе:
+
+```
+$compiler = BladeProvider::getCompiler();
+$compiler->directive('componentName', \Namespace\componentName::class);
+```
 
 ## Пользовательские директивы (custom directives)
 

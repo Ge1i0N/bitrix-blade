@@ -47,8 +47,8 @@ class BladeProvider
         $baseViewPath = isset($bitrixConfig['baseViewPath']) ? $bitrixConfig['baseViewPath'] : 'local/views';
         $cachePath = isset($bitrixConfig['cachePath']) ? $bitrixConfig['cachePath'] : 'local/cache/blade';
 
-        static::$baseViewPath = static::isAbsolutePath($baseViewPath) ? $baseViewPath : $_SERVER['DOCUMENT_ROOT'].'/'.$baseViewPath;
-        static::$cachePath = static::isAbsolutePath($cachePath) ? $cachePath : $_SERVER['DOCUMENT_ROOT'].'/'.$cachePath;
+        static::$baseViewPath = static::isAbsolutePath($baseViewPath) ? $baseViewPath : $_SERVER['DOCUMENT_ROOT'] . '/' . $baseViewPath;
+        static::$cachePath = static::isAbsolutePath($cachePath) ? $cachePath : $_SERVER['DOCUMENT_ROOT'] . '/' . $cachePath;
         static::instantiateServiceContainer();
         static::instantiateViewFactory();
         static::registerBitrixDirectives();
@@ -118,7 +118,7 @@ class BladeProvider
         $finder = Container::getInstance()->make('view.finder');
 
         $currentPaths = $finder->getPaths();
-        $newPaths = [$_SERVER['DOCUMENT_ROOT'].$templateDir];
+        $newPaths = [$_SERVER['DOCUMENT_ROOT'] . $templateDir];
 
         // Полностью перезаписывать пути нельзя, иначе вложенные компоненты + include перестанут работать.
         $newPaths = array_values(array_unique(array_merge($newPaths, $currentPaths)));
@@ -143,7 +143,7 @@ class BladeProvider
     {
         $finder = Container::getInstance()->make('view.finder');
         $currentPaths = $finder->getPaths();
-        $finder->setPaths(array_diff($currentPaths, [$_SERVER['DOCUMENT_ROOT'].$templateDir] ));
+        $finder->setPaths(array_diff($currentPaths, [$_SERVER['DOCUMENT_ROOT'] . $templateDir]));
 
         // Необходимо очистить внутренний кэш ViewFinder-а
         // Потому что иначе если в дочернем компоненте есть @include('foo'), то при вызове @include('foo') в родительском
@@ -157,11 +157,11 @@ class BladeProvider
      */
     protected static function instantiateServiceContainer()
     {
-        $container = Container::getInstance();
+        $container = BladeContainer::getInstance();
 
         if (!$container) {
-            $container = new Container();
-            Container::setInstance($container);
+            $container = new BladeContainer();
+            BladeContainer::setInstance($container);
         }
 
         static::$container = $container;
@@ -215,7 +215,7 @@ class BladeProvider
             $expression = rtrim($expression, ')');
             $expression = ltrim($expression, '(');
 
-            return '<?php $APPLICATION->IncludeComponent('.$expression.'); ?>';
+            return '<?php $APPLICATION->IncludeComponent(' . $expression . '); ?>';
         });
 
         $compiler->directive('block', function ($expression) {
@@ -230,7 +230,7 @@ class BladeProvider
         });
 
         $compiler->directive('lang', function ($expression) {
-            return '<?= Bitrix\Main\Localization\Loc::getMessage('.$expression.') ?>';
+            return '<?= Bitrix\Main\Localization\Loc::getMessage(' . $expression . ') ?>';
         });
 
         $compiler->directive('auth', function () {
@@ -246,7 +246,7 @@ class BladeProvider
             $name = !empty($name) ? $name : 'sessid';
             $name = trim($name, '"');
             $name = trim($name, "'");
-            return '<input type="hidden" name="'.$name.'" value="<?= bitrix_sessid() ?>" />';
+            return '<input type="hidden" name="' . $name . '" value="<?= bitrix_sessid() ?>" />';
         });
 
         $compiler->directive('endauth', $endIf);
