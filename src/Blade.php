@@ -7,6 +7,7 @@ use Illuminate\Events\Dispatcher;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\View\Engines\CompilerEngine;
 use Illuminate\View\Engines\EngineResolver;
+use Illuminate\View\Engines\FileEngine;
 use Illuminate\View\Engines\PhpEngine;
 use Illuminate\View\Factory;
 
@@ -58,8 +59,22 @@ class Blade
         $this->registerEngineResolver();
         $this->registerViewFinder();
         $this->registerFactory();
+        $this->bindServices();
     }
 
+    public function bindServices()
+    {
+        $me = $this;
+        $this->container->bind('Illuminate\Contracts\View\Factory', function () use ($me) {
+            return $me->viewFactory;
+        });
+        $this->container->bind('Illuminate\Contracts\Foundation\Application', function () use ($me) {
+            return $me->container;
+        });
+        $this->container->bind('view', function () use ($me) {
+            return $me->viewFactory;
+        });
+    }
     /**
      * Getter for view factory.
      *
@@ -106,10 +121,18 @@ class Blade
         $this->container->singleton('view.engine.resolver', function () use ($me) {
             $resolver = new EngineResolver();
 
-            $me->registerPhpEngine($resolver);
-            $me->registerBladeEngine($resolver);
+            foreach (['file', 'php', 'blade'] as $engine) {
+                $me->{'register' . ucfirst($engine) . 'Engine'}($resolver);
+            }
 
             return $resolver;
+        });
+    }
+
+    public function registerFileEngine($resolver)
+    {
+        $resolver->register('file', function () {
+            return new FileEngine($this->app['files']);
         });
     }
 
@@ -122,8 +145,9 @@ class Blade
      */
     public function registerPhpEngine($resolver)
     {
-        $resolver->register('php', function () {
-            return new PhpEngine();
+        $app = $this->container;
+        $resolver->register('php', function () use ($app) {
+            return new PhpEngine($app['files']);
         });
     }
 
@@ -156,7 +180,6 @@ class Blade
     public function registerFactory()
     {
         $resolver = $this->container['view.engine.resolver'];
-
         $finder = $this->container['view.finder'];
 
         $factory = new Factory($resolver, $finder, $this->container['events']);

@@ -157,11 +157,11 @@ class BladeProvider
      */
     protected static function instantiateServiceContainer()
     {
-        $container = Container::getInstance();
+        $container = BladeContainer::getInstance();
 
         if (!$container) {
-            $container = new Container();
-            Container::setInstance($container);
+            $container = new BladeContainer();
+            BladeContainer::setInstance($container);
         }
 
         static::$container = $container;
