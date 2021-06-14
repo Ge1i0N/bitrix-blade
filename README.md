@@ -5,9 +5,9 @@
 
 ## Установка
 
-1)```composer require ge1i0n/bitrix-blade```
+1. ```composer require ge1i0n/bitrix-blade```
 
-2) добавляем в init.php
+2. Добавляем в init.php
 
 ```php
 
@@ -34,7 +34,7 @@ BladeProvider::register();
 
 ```
 $compiler = BladeProvider::getCompiler();
-$compiler->directive('componentName', \Namespace\componentName::class);
+$compiler->component('componentName', \Namespace\componentName::class);
 ```
 
 ## Пользовательские директивы (custom directives)
