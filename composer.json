@@ -9,11 +9,16 @@
     {
       "name": "Nekrasov Ilya",
       "email": "nekrasov.ilya90@gmail.com"
+    },
+    {
+      "name": "Gennadiy Sevalnev",
+      "email": "gennadiy.sevalnev@mail.ru"
     }
   ],
   "homepage": "https://github.com/ge1i0n/bitrix-blade",
   "require": {
     "php": ">=7.3.0",
+    "illuminate/config": "8.*",
     "illuminate/container": "8.*",
     "illuminate/view": "8.*",
     "illuminate/events": "8.*",

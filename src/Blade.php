@@ -2,6 +2,7 @@
 
 namespace Arrilot\BitrixBlade;
 
+use Illuminate\Config\Repository;
 use Illuminate\Container\Container;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Filesystem\Filesystem;
@@ -59,6 +60,7 @@ class Blade
         $this->registerEngineResolver();
         $this->registerViewFinder();
         $this->registerFactory();
+        $this->registerConfig();
         $this->bindServices();
     }
 
@@ -201,6 +203,22 @@ class Blade
             $paths = $me->viewPaths;
 
             return new ViewFinder($app['files'], $paths);
+        });
+    }
+
+    /**
+     * Register the config implementation.
+     *
+     * @return void
+     */
+    public function registerConfig()
+    {
+        $me = $this;
+        $this->container->singleton('config', function ($app) use ($me) {
+            return new Repository(['view' => [
+                'compiled' => $me->cachePath,
+                'paths' => $me->viewPaths,
+            ]]);
         });
     }
 }
