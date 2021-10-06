@@ -32,16 +32,21 @@ BladeProvider::register();
 Вы можете использовать x-компоненты в своём шаблоне.
 Для привязки своих классов используйте следующий способ регистрации в компиляторе:
 
-```
+```php
 $compiler = BladeProvider::getCompiler();
-$compiler->component('componentName', \Namespace\componentName::class);
+$compiler->component('your-component', \Namespace\YourComponent::class);
+```
+#### Dynamic Components
+Класс динамического x-компонента есть в файлах модуля Illuminate, но его нужно зарегистрировать вручную:
+```php
+$compiler->component('dynamic-component', \Illuminate\View\DynamicComponent::class);
 ```
 
 ## Пользовательские директивы (custom directives)
 
 Для того чтобы добавить свою директиву, необходимо зарегистрировать её в компиляторе:
 
-```
+```php
 $compiler = BladeProvider::getCompiler();
 $compiler->directive('directiveName', function ($expression) {
     return '...';
