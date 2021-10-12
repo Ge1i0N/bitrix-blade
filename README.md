@@ -36,12 +36,6 @@ BladeProvider::register();
 $compiler = BladeProvider::getCompiler();
 $compiler->component('your-component', \Namespace\YourComponent::class);
 ```
-#### Dynamic Components
-Класс динамического x-компонента есть в файлах модуля Illuminate, но его нужно зарегистрировать вручную:
-```php
-$compiler->component('dynamic-component', \Illuminate\View\DynamicComponent::class);
-```
-
 ## Пользовательские директивы (custom directives)
 
 Для того чтобы добавить свою директиву, необходимо зарегистрировать её в компиляторе:
