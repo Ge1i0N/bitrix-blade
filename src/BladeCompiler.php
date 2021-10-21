@@ -8,7 +8,7 @@ use Illuminate\View\Compilers\BladeCompiler as BaseCompiler;
 class BladeCompiler extends BaseCompiler
 {
     protected $classComponentAliases = [
-        'dynamic-component' => \Illuminate\View\DynamicComponent::class,
+        'dynamic-component' => \Arrilot\BitrixBlade\BladeDynamicComponent::class,
     ];
 
     /**
