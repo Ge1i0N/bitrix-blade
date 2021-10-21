@@ -13,6 +13,6 @@ class BladeContainer extends Container
      */
     public function getNamespace()
     {
-        return '';
+        return BladeProvider::getNamespace();
     }
 }

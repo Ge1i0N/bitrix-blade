@@ -25,6 +25,14 @@ class BladeProvider
     protected static $cachePath;
 
     /**
+     * Main components namespace.
+     *
+     * @var string
+     */
+    protected static $namespace;
+
+
+    /**
      * View factory.
      *
      * @var Factory
@@ -46,9 +54,11 @@ class BladeProvider
         $bitrixConfig = Configuration::getValue('bitrix-blade');
         $baseViewPath = isset($bitrixConfig['baseViewPath']) ? $bitrixConfig['baseViewPath'] : 'local/views';
         $cachePath = isset($bitrixConfig['cachePath']) ? $bitrixConfig['cachePath'] : 'local/cache/blade';
+        $namespace = isset($bitrixConfig['namespace']) ? $bitrixConfig['namespace'] : '\\View\\Components\\';
 
         static::$baseViewPath = static::isAbsolutePath($baseViewPath) ? $baseViewPath : $_SERVER['DOCUMENT_ROOT'] . '/' . $baseViewPath;
         static::$cachePath = static::isAbsolutePath($cachePath) ? $cachePath : $_SERVER['DOCUMENT_ROOT'] . '/' . $cachePath;
+        static::$namespace = $namespace;
         static::instantiateServiceContainer();
         static::instantiateViewFactory();
         static::registerBitrixDirectives();
@@ -300,5 +310,13 @@ class BladeProvider
     public static function getCachePath()
     {
         return static::$cachePath;
+    }
+
+    /**
+     * @return string|null
+     */
+    public static function getNamespace()
+    {
+        return static::$namespace;
     }
 }

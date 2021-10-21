@@ -30,12 +30,21 @@ BladeProvider::register();
 ## X-Компоненты
 
 Вы можете использовать x-компоненты в своём шаблоне.
-Для привязки своих классов используйте следующий способ регистрации в компиляторе:
+По-умолчанию классы x-компонентов подгружаются из пространства имён `View\\Components\\`, но можно задать своё пространство имён в [конфигурации](#конфигурация).
+Если вы хотите использовать специфический класс для компонента, его можно зарегистрировать в компиляторе следующим образом:
 
 ```php
 $compiler = BladeProvider::getCompiler();
-$compiler->component('your-component', \Namespace\YourComponent::class);
+$compiler->component('your-component', \\Namespace\\YourComponent::class);
 ```
+
+Также вы можете использовать [дополнительные простраства имён](https://laravel.com/docs/8.x/blade#manually-registering-package-components), если это необходимо.
+Для этого их нужно зарегистрировать:
+```php
+$compiler = BladeProvider::getCompiler();
+$compiler->componentNamespace('Any\\Components\\Namespace\\', 'any');
+```
+
 ## Пользовательские директивы (custom directives)
 
 Для того чтобы добавить свою директиву, необходимо зарегистрировать её в компиляторе:
@@ -66,6 +75,7 @@ $compiler->directive('directiveName', function ($expression) {
         'value'    => [
             'baseViewPath' => '/absolute/path/or/path/from/document/root', // по умолчанию 'local/views'
             'cachePath' => '/absolute/path/or/path/from/document/root', // по умолчанию 'local/cache/blade'
+            'namespace' => 'Custom\\Namespace\\', // по умолчанию 'View\\Components\\'
         ],
         'readonly' => false,
     ],
@@ -83,7 +93,7 @@ $compiler->directive('directiveName', function ($expression) {
 
 1. Битрикс позволяет использовать сторонние шаблонизаторы только в шаблонах компонентов. Шаблоны сайтов только на php.
 2. По понятным причинам наследованием шаблонов в полную силу воспользоваться не получится.
-3. Традиционное расширение `.blade.php` использовать нельзя. Битрикс видя `.php` включает php движок.
+3. Вызывать шаблон как `template.blade.php` нельзя. Битрикс видя `.php` включает php движок. Однако в остальных местах ничего не мешает его использовать.
 4. Вместо `$this` в шаблоне следует использовать `$template` - например `$template->setFrameMode(true);`
 5. Проверку `<?if(!defined("B_PROLOG_INCLUDED")||B_PROLOG_INCLUDED!==true) die();?>` прописывать в blade-шаблоне не нужно, она добавляется в скомпилированные view автоматически. Также вместе с этим выполняется и ```extract($arResult, EXTR_SKIP);```
 6. Чтобы языковой файл из шаблона подключился, его (этот языковой файл) надо назвать как обычно - `template.php`

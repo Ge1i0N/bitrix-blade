@@ -32,9 +32,11 @@ class BladeCompiler extends BaseCompiler
             [$class, $alias] = [$alias, $class];
         }
 
+        $namespace = BladeProvider::getNamespace();
+
         if (is_null($alias)) {
-            $alias = Str::contains($class, '\\View\\Components\\')
-                ? collect(explode('\\', Str::after($class, '\\View\\Components\\')))->map(function ($segment) {
+            $alias = Str::contains($class, $namespace)
+                ? collect(explode('\\', Str::after($class, $namespace)))->map(function ($segment) {
                     return Str::kebab($segment);
                 })->implode(':')
                 : Str::kebab(class_basename($class));
@@ -45,5 +47,24 @@ class BladeCompiler extends BaseCompiler
         }
 
         $this->classComponentAliases[$alias] = $class;
+    }
+
+    /**
+     * Compile the component tags.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    protected function compileComponentTags($value)
+    {
+        if (!$this->compilesComponentTags) {
+            return $value;
+        }
+
+        return (new BladeComponentTagCompiler(
+            $this->classComponentAliases,
+            $this->classComponentNamespaces,
+            $this
+        ))->compile($value);
     }
 }
