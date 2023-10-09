@@ -17,11 +17,11 @@
   ],
   "homepage": "https://github.com/ge1i0n/bitrix-blade",
   "require": {
-    "php": ">=7.3.0",
-    "illuminate/config": "8.*",
-    "illuminate/container": "8.*",
-    "illuminate/view": "8.*",
-    "illuminate/events": "8.*",
+    "php": "^7.3|^8.0",
+    "illuminate/config": "9.*",
+    "illuminate/container": "9.*",
+    "illuminate/view": "9.*",
+    "illuminate/events": "9.*",
     "arrilot/bitrix-hermitage": "^1"
   },
   "autoload": {

@@ -77,7 +77,7 @@ $compiler->directive('directiveName', function ($expression) {
             'cachePath' => '/absolute/path/or/path/from/document/root', // по умолчанию 'local/cache/blade'
             'namespace' => 'Custom\\Namespace\\', // по умолчанию 'View\\Components\\'
         ],
-        'readonly' => false,
+        'readonly' => true,
     ],
 ```
 
