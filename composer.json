@@ -22,7 +22,8 @@
     "illuminate/container": "9.*",
     "illuminate/view": "9.*",
     "illuminate/events": "9.*",
-    "arrilot/bitrix-hermitage": "^1"
+    "arrilot/bitrix-hermitage": "^1",
+    "ramsey/uuid": "^4.7.5"
   },
   "autoload": {
     "psr-4": {
