@@ -106,7 +106,7 @@ $compiler->directive('directiveName', function ($expression) {
 3. Вызывать шаблон как `template.blade.php` нельзя. Битрикс видя `.php` включает php движок. Однако в остальных местах
    ничего не мешает его использовать.
 4. Вместо `$this` в шаблоне следует использовать `$template` - например `$template->setFrameMode(true);`
-5. Проверку `<?if(!defined("B_PROLOG_INCLUDED")||B_PROLOG_INCLUDED!==true) die();?>` прописывать в blade-шаблоне не
+5. Проверку `<?php if(!defined("B_PROLOG_INCLUDED")||B_PROLOG_INCLUDED!==true) die(); ?>` прописывать в blade-шаблоне не
    нужно, она добавляется в скомпилированные view автоматически. Также вместе с этим выполняется и
    ```extract($arResult, EXTR_SKIP);```
 6. Чтобы языковой файл из шаблона подключился, его (этот языковой файл) надо назвать как обычно - `template.php`
