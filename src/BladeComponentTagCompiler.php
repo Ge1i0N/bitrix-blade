@@ -11,8 +11,8 @@ class BladeComponentTagCompiler extends ComponentTagCompiler
     /**
      * Guess the class name for the given component.
      *
-     * @param  string  $component
-     * @return string
+     * @param   string $component
+     * @return  string
      */
     public function guessClassName(string $component)
     {

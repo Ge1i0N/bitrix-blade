@@ -1,6 +1,7 @@
 #Директивы по работе с эрмитажем
 
-Используется вспомогательный пакет [https://github.com/arrilot/bitrix-hermitage](https://github.com/arrilot/bitrix-hermitage)
+Используется вспомогательный
+пакет [https://github.com/arrilot/bitrix-hermitage](https://github.com/arrilot/bitrix-hermitage)
 
 Таблица соответвтия директив и методов пакета
 

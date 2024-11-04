@@ -43,11 +43,11 @@ if (!function_exists('renderBladeTemplate')) {
         if (file_exists($_SERVER['DOCUMENT_ROOT'] . $epilogue)) {
             $component = $template->__component;
             $component->SetTemplateEpilog([
-                'epilogFile'     => $epilogue,
-                'templateName'   => $template->__name,
-                'templateFile'   => $template->__file,
-                'templateFolder' => $template->__folder,
-                'templateData'   => false,
+                'epilogFile'        => $epilogue,
+                'templateName'      => $template->__name,
+                'templateFile'      => $template->__file,
+                'templateFolder'    => $template->__folder,
+                'templateData'      => false,
             ]);
         }
 
@@ -60,10 +60,10 @@ if (!function_exists('app')) {
     /**
      * Get the available container instance.
      *
-     * @param  string|null  $abstract
-     * @param  array  $parameters
-     * @return mixed|\Illuminate\Contracts\Foundation\Application
-     */
+     * @param   string|null $abstract
+     * @param   array $parameters
+     * @return  mixed|\Illuminate\Contracts\Foundation\Application
+ */
     function app($abstract = null, array $parameters = [])
     {
         if (is_null($abstract)) {
@@ -77,11 +77,11 @@ if (!function_exists('view')) {
     /**
      * Get the evaluated view contents for the given view.
      *
-     * @param  string|null  $view
-     * @param  \Illuminate\Contracts\Support\Arrayable|array  $data
-     * @param  array  $mergeData
-     * @return \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory
-     */
+     * @param   string|null $view
+     * @param   \Illuminate\Contracts\Support\Arrayable|array $data
+     * @param   array $mergeData
+     * @return  \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory
+ */
     function view($view = null, $data = [], $mergeData = [])
     {
         $factory = app(Factory::class);

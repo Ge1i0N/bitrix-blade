@@ -64,29 +64,6 @@ class Blade
         $this->bindServices();
     }
 
-    public function bindServices()
-    {
-        $me = $this;
-        $this->container->bind('Illuminate\Contracts\View\Factory', function () use ($me) {
-            return $me->viewFactory;
-        });
-        $this->container->bind('Illuminate\Contracts\Foundation\Application', function () use ($me) {
-            return $me->container;
-        });
-        $this->container->bind('view', function () use ($me) {
-            return $me->viewFactory;
-        });
-    }
-    /**
-     * Getter for view factory.
-     *
-     * @return Factory
-     */
-    public function view()
-    {
-        return $this->viewFactory;
-    }
-
     /**
      * Register filesystem in container.
      *
@@ -131,6 +108,76 @@ class Blade
         });
     }
 
+    /**
+     * Register the view finder implementation.
+     *
+     * @return void
+     */
+    public function registerViewFinder()
+    {
+        $me = $this;
+        $this->container->singleton('view.finder', function ($app) use ($me) {
+            $paths = $me->viewPaths;
+
+            return new ViewFinder($app['files'], $paths);
+        });
+    }
+
+    /**
+     * Register the view factory.
+     */
+    public function registerFactory()
+    {
+        $resolver = $this->container['view.engine.resolver'];
+        $finder = $this->container['view.finder'];
+
+        $factory = new Factory($resolver, $finder, $this->container['events']);
+        $factory->setContainer($this->container);
+
+        //$factory->share('app', $this->container);
+        $this->viewFactory = $factory;
+    }
+
+    /**
+     * Register the config implementation.
+     *
+     * @return void
+     */
+    public function registerConfig()
+    {
+        $me = $this;
+        $this->container->singleton('config', function ($app) use ($me) {
+            return new Repository(['view' => [
+                'compiled' => $me->cachePath,
+                'paths' => $me->viewPaths,
+            ]]);
+        });
+    }
+
+    public function bindServices()
+    {
+        $me = $this;
+        $this->container->bind('Illuminate\Contracts\View\Factory', function () use ($me) {
+            return $me->viewFactory;
+        });
+        $this->container->bind('Illuminate\Contracts\Foundation\Application', function () use ($me) {
+            return $me->container;
+        });
+        $this->container->bind('view', function () use ($me) {
+            return $me->viewFactory;
+        });
+    }
+
+    /**
+     * Getter for view factory.
+     *
+     * @return Factory
+     */
+    public function view()
+    {
+        return $this->viewFactory;
+    }
+
     public function registerFileEngine($resolver)
     {
         $resolver->register('file', function () {
@@ -173,52 +220,6 @@ class Blade
 
         $resolver->register('blade', function () use ($app) {
             return new CompilerEngine($app['blade.compiler'], $app['files']);
-        });
-    }
-
-    /**
-     * Register the view factory.
-     */
-    public function registerFactory()
-    {
-        $resolver = $this->container['view.engine.resolver'];
-        $finder = $this->container['view.finder'];
-
-        $factory = new Factory($resolver, $finder, $this->container['events']);
-        $factory->setContainer($this->container);
-
-        //$factory->share('app', $this->container);
-        $this->viewFactory = $factory;
-    }
-
-    /**
-     * Register the view finder implementation.
-     *
-     * @return void
-     */
-    public function registerViewFinder()
-    {
-        $me = $this;
-        $this->container->singleton('view.finder', function ($app) use ($me) {
-            $paths = $me->viewPaths;
-
-            return new ViewFinder($app['files'], $paths);
-        });
-    }
-
-    /**
-     * Register the config implementation.
-     *
-     * @return void
-     */
-    public function registerConfig()
-    {
-        $me = $this;
-        $this->container->singleton('config', function ($app) use ($me) {
-            return new Repository(['view' => [
-                'compiled' => $me->cachePath,
-                'paths' => $me->viewPaths,
-            ]]);
         });
     }
 }

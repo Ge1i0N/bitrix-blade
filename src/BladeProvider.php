@@ -65,101 +65,14 @@ class BladeProvider
 
         global $arCustomTemplateEngines;
         $arCustomTemplateEngines['blade'] = [
-            'templateExt' => ['blade'],
-            'function'    => 'renderBladeTemplate',
+            'templateExt'   => ['blade'],
+            'function'      => 'renderBladeTemplate',
         ];
     }
 
     protected static function isAbsolutePath($path)
     {
         return $path && ($path[0] === DIRECTORY_SEPARATOR || preg_match('~\A[A-Z]:(?![^/\\\\])~i', $path) > 0);
-    }
-
-    /**
-     * Get view factory.
-     *
-     * @return Factory
-     */
-    public static function getViewFactory()
-    {
-        return static::$viewFactory;
-    }
-
-    /**
-     * @return BladeCompiler
-     */
-    public static function getCompiler()
-    {
-        return static::$container['blade.compiler'];
-    }
-
-    /**
-     * Clear all compiled view files.
-     */
-    public static function clearCache()
-    {
-        $path = static::$cachePath;
-
-        if (!$path) {
-            throw new RuntimeException('Cache path is empty');
-        }
-
-        $success = true;
-        foreach (glob("{$path}/*") as $view) {
-            try {
-                if (!@unlink($view)) {
-                    $success = false;
-                }
-            } catch (ErrorException $e) {
-                $success = false;
-            }
-        }
-
-        return $success;
-    }
-
-    /**
-     * Update paths where blade tries to find additional views.
-     *
-     * @param string $templateDir
-     */
-    public static function addTemplateFolderToViewPaths($templateDir)
-    {
-        $finder = Container::getInstance()->make('view.finder');
-
-        $currentPaths = $finder->getPaths();
-        $newPaths = [$_SERVER['DOCUMENT_ROOT'] . $templateDir];
-
-        // Полностью перезаписывать пути нельзя, иначе вложенные компоненты + include перестанут работать.
-        $newPaths = array_values(array_unique(array_merge($newPaths, $currentPaths)));
-        if (!in_array(static::$baseViewPath, $newPaths)) {
-            $newPaths[] = static::$baseViewPath;
-        }
-
-        // Необходимо очистить внутренний кэш ViewFinder-а
-        // Потому что иначе если в родительском компоненте есть @include('foo'), то при вызове @include('foo') из дочернего,
-        // он не будет искать foo в дочернем, а сразу подключит foo из родительского компонента
-        $finder->flush();
-
-        $finder->setPaths($newPaths);
-    }
-
-    /**
-     * Undo addTemplateFolderToViewPaths
-     *
-     * @param string $templateDir
-     */
-    public static function removeTemplateFolderFromViewPaths($templateDir)
-    {
-        $finder = Container::getInstance()->make('view.finder');
-        $currentPaths = $finder->getPaths();
-        $finder->setPaths(array_diff($currentPaths, [$_SERVER['DOCUMENT_ROOT'] . $templateDir]));
-
-        // Необходимо очистить внутренний кэш ViewFinder-а
-        // Потому что иначе если в дочернем компоненте есть @include('foo'), то при вызове @include('foo') в родительском
-        // после подключения дочернего,
-        // он не будет искать foo в родительском, а сразу подключит foo из дочернего компонента
-        $finder->flush();
     }
 
     /**
@@ -267,6 +180,14 @@ class BladeProvider
     }
 
     /**
+     * @return BladeCompiler
+     */
+    public static function getCompiler()
+    {
+        return static::$container['blade.compiler'];
+    }
+
+    /**
      * @param BladeCompiler $compiler
      */
     private static function registerHermitageDirectives($compiler)
@@ -302,6 +223,85 @@ class BladeProvider
                 return '<?= \Arrilot\BitrixHermitage\Action::' . $action . '($template, ' . $expression . '); ?>';
             });
         }
+    }
+
+    /**
+     * Get view factory.
+     *
+     * @return Factory
+     */
+    public static function getViewFactory()
+    {
+        return static::$viewFactory;
+    }
+
+    /**
+     * Clear all compiled view files.
+     */
+    public static function clearCache()
+    {
+        $path = static::$cachePath;
+
+        if (!$path) {
+            throw new RuntimeException('Cache path is empty');
+        }
+
+        $success = true;
+        foreach (glob("{$path}/*") as $view) {
+            try {
+                if (!@unlink($view)) {
+                    $success = false;
+                }
+            } catch (ErrorException $e) {
+                $success = false;
+            }
+        }
+
+        return $success;
+    }
+
+    /**
+     * Update paths where blade tries to find additional views.
+     *
+     * @param string $templateDir
+     */
+    public static function addTemplateFolderToViewPaths($templateDir)
+    {
+        $finder = Container::getInstance()->make('view.finder');
+
+        $currentPaths = $finder->getPaths();
+        $newPaths = [$_SERVER['DOCUMENT_ROOT'] . $templateDir];
+
+        // Полностью перезаписывать пути нельзя, иначе вложенные компоненты + include перестанут работать.
+        $newPaths = array_values(array_unique(array_merge($newPaths, $currentPaths)));
+        if (!in_array(static::$baseViewPath, $newPaths)) {
+            $newPaths[] = static::$baseViewPath;
+        }
+
+        // Необходимо очистить внутренний кэш ViewFinder-а
+        // Потому что иначе если в родительском компоненте есть @include('foo'), то при вызове @include('foo') из дочернего,
+        // он не будет искать foo в дочернем, а сразу подключит foo из родительского компонента
+        $finder->flush();
+
+        $finder->setPaths($newPaths);
+    }
+
+    /**
+     * Undo addTemplateFolderToViewPaths
+     *
+     * @param string $templateDir
+     */
+    public static function removeTemplateFolderFromViewPaths($templateDir)
+    {
+        $finder = Container::getInstance()->make('view.finder');
+        $currentPaths = $finder->getPaths();
+        $finder->setPaths(array_diff($currentPaths, [$_SERVER['DOCUMENT_ROOT'] . $templateDir]));
+
+        // Необходимо очистить внутренний кэш ViewFinder-а
+        // Потому что иначе если в дочернем компоненте есть @include('foo'), то при вызове @include('foo') в родительском
+        // после подключения дочернего,
+        // он не будет искать foo в родительском, а сразу подключит foo из дочернего компонента
+        $finder->flush();
     }
 
     /**
