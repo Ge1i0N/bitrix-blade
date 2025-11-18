@@ -3,7 +3,7 @@
 Используется вспомогательный
 пакет [https://github.com/arrilot/bitrix-hermitage](https://github.com/arrilot/bitrix-hermitage)
 
-Таблица соответвтия директив и методов пакета
+Таблица соответствия директив и методов пакета
 
 ```php
 @actionEditAndDeleteIBlockElement($element)             => Action::editAndDeleteIBlockElement($template, $element),

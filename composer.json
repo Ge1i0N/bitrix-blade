@@ -18,10 +18,10 @@
   "homepage": "https://github.com/ge1i0n/bitrix-blade",
   "require": {
     "php": "^8.2",
-    "illuminate/config": "^11.0",
-    "illuminate/container": "^11.0",
-    "illuminate/view": "^11.0",
-    "illuminate/events": "^11.0",
+    "illuminate/config": "^12.0",
+    "illuminate/container": "^12.0",
+    "illuminate/view": "^12.0",
+    "illuminate/events": "^12.0",
     "arrilot/bitrix-hermitage": "^1.0",
     "ramsey/uuid": "^4.7"
   },
